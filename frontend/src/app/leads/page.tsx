@@ -183,7 +183,7 @@ export default function LeadsPage() {
       <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
         <div style={{ position: "relative", flex: "1 1 240px" }}>
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--color-muted)" }} />
-          <input className="input-base pl-10" placeholder="Pesquisar por nome ou e-mail..." value={search} onChange={e => setSearch(e.target.value)} />
+          <input className="input-base" style={{ paddingLeft: "2.25rem" }} placeholder="Pesquisar por nome ou e-mail..." value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         <select className="input-base" style={{ width: "auto", minWidth: 160 }} value={statusFilter} onChange={e => setStatusFilter(e.target.value as any)}>
           <option value="">Todos os status</option>

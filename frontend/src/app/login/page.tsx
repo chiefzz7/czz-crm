@@ -53,7 +53,8 @@ export default function LoginPage() {
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--color-muted)" }} />
                 <input
                   type="email"
-                  className="input-base pl-10"
+                  className="input-base"
+                  style={{ paddingLeft: "2.25rem" }}
                   placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -69,7 +70,8 @@ export default function LoginPage() {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--color-muted)" }} />
                 <input
                   type={showPass ? "text" : "password"}
-                  className="input-base pl-10 pr-10"
+                  className="input-base"
+                  style={{ paddingLeft: "2.25rem", paddingRight: "2.25rem" }}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

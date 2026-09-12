@@ -1,5 +1,4 @@
 <h1 align="center">
-  <img src="frontend/public/assets/logo.png" alt="CZZ CRM" width="60" /><br/>
   CZZ CRM — Sales Pipeline
 </h1>
 
@@ -122,4 +121,4 @@ JWT_REFRESH_SECRET_KEY=... # openssl rand -hex 64
 
 ## 📄 Licença
 
-Proprietário — © 2026 Czz Tech. Todos os direitos reservados.
+Proprietário — © 2026 Samuel Ramos. Todos os direitos reservados.
