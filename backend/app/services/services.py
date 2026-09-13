@@ -123,10 +123,11 @@ class LeadService:
         return lead
 
     def create_lead(self, data: LeadCreate, user_id: str) -> dict:
-        # Verifica email duplicado
-        existing = [l for l in store.get_leads(user_id) if l["email"].lower() == data.email.lower()]
-        if existing:
-            raise ConflictError("Já existe um lead com esse e-mail.")
+        # Verifica email duplicado apenas se fornecido
+        if data.email:
+            existing = [l for l in store.get_leads(user_id) if (l.get("email") or "").lower() == data.email.lower()]
+            if existing:
+                raise ConflictError("Já existe um lead com esse e-mail.")
         payload = data.model_dump()
         payload["user_id"] = user_id
         payload["status"] = "novo"
