@@ -37,35 +37,28 @@ export function Sidebar() {
 
   return (
     <aside
-      style={{
-        width: collapsed ? 64 : 220,
-        background: "var(--color-sidebar-bg)",
-        color: "var(--color-sidebar-text)",
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        position: "sticky",
-        top: 0,
-        flexShrink: 0,
-        transition: "width 0.25s ease",
-        zIndex: 50,
-      }}
+      className="flex flex-col h-screen sticky top-0 shrink-0 z-50 transition-[width] duration-[250ms] ease-in-out bg-[var(--color-sidebar-bg)] text-[var(--color-sidebar-text)]"
+      style={{ width: collapsed ? 64 : 220 }}
     >
       {/* Logo */}
-      <div style={{ padding: collapsed ? "20px 0" : "20px 16px", borderBottom: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", gap: 10, justifyContent: collapsed ? "center" : "flex-start" }}>
-        <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, padding: 6, display: "flex", flexShrink: 0 }}>
+      <div
+        className={`border-b border-white/10 flex items-center gap-2.5 ${
+          collapsed ? "justify-center px-0 py-5" : "justify-start px-4 py-5"
+        }`}
+      >
+        <div className="bg-white/15 rounded-[10px] p-1.5 flex shrink-0">
           <BookMarked className="w-5 h-5 text-white" />
         </div>
         {!collapsed && (
           <div>
-            <span style={{ fontWeight: 700, fontSize: 16, color: "#fff", letterSpacing: "-0.01em" }}>CZZ CRM</span>
-            <p style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", marginTop: 1 }}>Vendas de Cursos</p>
+            <span className="font-bold text-base text-white tracking-tight">CZZ CRM</span>
+            <p className="text-[10px] text-white/50 mt-px">Vendas de Cursos</p>
           </div>
         )}
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1, padding: "12px 8px", display: "flex", flexDirection: "column", gap: 2 }}>
+      <nav className="flex-1 px-2 py-3 flex flex-col gap-0.5">
         {navItems.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(href + "/");
           return (
@@ -73,29 +66,15 @@ export function Sidebar() {
               key={href}
               href={href}
               title={collapsed ? label : undefined}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                padding: collapsed ? "10px 0" : "9px 12px",
-                justifyContent: collapsed ? "center" : "flex-start",
-                borderRadius: 8,
-                textDecoration: "none",
-                fontWeight: active ? 600 : 400,
-                fontSize: 14,
-                color: active ? "#fff" : "var(--color-sidebar-text)",
-                background: active ? "rgba(255,255,255,0.15)" : "transparent",
-                borderLeft: active && !collapsed ? "3px solid #93c5fd" : "3px solid transparent",
-                transition: "background 0.15s ease, color 0.15s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (!active) (e.currentTarget as HTMLElement).style.background = "var(--color-sidebar-hover)";
-              }}
-              onMouseLeave={(e) => {
-                if (!active) (e.currentTarget as HTMLElement).style.background = "transparent";
-              }}
+              className={`flex items-center gap-2.5 rounded-lg no-underline text-sm transition-colors duration-150
+                ${collapsed ? "justify-center px-0 py-2.5" : "justify-start px-3 py-[9px]"}
+                ${active
+                  ? "font-semibold text-white bg-white/15 border-l-[3px] border-blue-300"
+                  : "font-normal text-[var(--color-sidebar-text)] bg-transparent border-l-[3px] border-transparent hover:bg-[var(--color-sidebar-hover)]"
+                }
+              `}
             >
-              <Icon className="w-4 h-4 flex-shrink-0" />
+              <Icon className="w-4 h-4 shrink-0" />
               {!collapsed && <span>{label}</span>}
             </Link>
           );
@@ -103,46 +82,22 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div style={{ padding: "8px", borderTop: "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column", gap: 4 }}>
+      <div className="p-2 border-t border-white/10 flex flex-col gap-1">
         <button
           onClick={handleLogout}
           title={collapsed ? "Sair" : undefined}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            padding: collapsed ? "10px 0" : "9px 12px",
-            justifyContent: collapsed ? "center" : "flex-start",
-            borderRadius: 8,
-            background: "transparent",
-            border: "none",
-            color: "rgba(255,255,255,0.6)",
-            fontSize: 14,
-            cursor: "pointer",
-            width: "100%",
-            transition: "background 0.15s ease, color 0.15s ease",
-          }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.2)"; (e.currentTarget as HTMLElement).style.color = "#fca5a5"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.6)"; }}
+          className={`flex items-center gap-2.5 rounded-lg bg-transparent border-none text-sm text-white/60 cursor-pointer w-full transition-colors duration-150
+            hover:bg-red-500/20 hover:text-red-300
+            ${collapsed ? "justify-center px-0 py-2.5" : "justify-start px-3 py-[9px]"}
+          `}
         >
-          <LogOut className="w-4 h-4 flex-shrink-0" />
+          <LogOut className="w-4 h-4 shrink-0" />
           {!collapsed && <span>Sair</span>}
         </button>
 
         <button
           onClick={() => setCollapsed(!collapsed)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 8,
-            borderRadius: 8,
-            background: "rgba(255,255,255,0.08)",
-            border: "none",
-            color: "rgba(255,255,255,0.5)",
-            cursor: "pointer",
-            transition: "background 0.15s ease",
-          }}
+          className="flex items-center justify-center p-2 rounded-lg bg-white/[0.08] border-none text-white/50 cursor-pointer transition-colors duration-150 hover:bg-white/15"
         >
           {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>

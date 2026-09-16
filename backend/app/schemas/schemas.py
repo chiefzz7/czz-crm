@@ -86,7 +86,7 @@ LEAD_SOURCES = ["ads", "organic", "referral", "webinar", "indicacao", "outro"]
 
 class LeadCreate(BaseModel):
     name: str = Field(min_length=2, max_length=100)
-    email: EmailStr
+    email: Optional[EmailStr] = None  # opcional no cadastro
     phone: Optional[str] = Field(default=None, max_length=20)
     course_id: Optional[str] = None
     source: Optional[str] = None
@@ -131,7 +131,7 @@ class LeadMoveRequest(BaseModel):
 class LeadOut(BaseModel):
     id: str
     name: str
-    email: str
+    email: Optional[str]  # pode ser null
     phone: Optional[str]
     course_id: Optional[str]
     status: str

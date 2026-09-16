@@ -34,7 +34,7 @@ export interface Course {
 export interface Lead {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
   phone: string | null;
   course_id: string | null;
   status: LeadStatus;
@@ -91,16 +91,22 @@ export interface CourseCreateRequest {
 }
 
 export interface LeadCreateRequest {
-  name: string;
-  email: string;
+  name: string;         // obrigatório
+  course_id: string;    // obrigatório (validado no frontend)
+  source: LeadSource;   // obrigatório (validado no frontend)
+  email?: string;
   phone?: string;
-  course_id?: string;
-  source?: LeadSource;
   notes?: string;
 }
 
-export interface LeadUpdateRequest extends Partial<LeadCreateRequest> {
+export interface LeadUpdateRequest {
+  name?: string;
+  email?: string;
+  phone?: string;
+  course_id?: string;
+  source?: LeadSource;
   status?: LeadStatus;
+  notes?: string;
 }
 
 export interface InteractionCreateRequest {
