@@ -37,41 +37,39 @@ function LeadCard({ lead, courses, index }: { lead: Lead; courses: Course[]; ind
           {...provided.draggableProps}
           style={{
             ...provided.draggableProps.style,
-            background: "white",
-            borderRadius: 10,
-            padding: "12px 14px",
             boxShadow: snapshot.isDragging ? "var(--shadow-lg)" : "var(--shadow-sm)",
-            border: "1px solid var(--color-border)",
-            transition: "box-shadow 0.15s ease",
-            cursor: "grab",
           }}
+          className="bg-white rounded-[10px] px-3.5 py-3 border border-[var(--color-border)] transition-shadow duration-150 cursor-grab"
         >
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-            <span {...provided.dragHandleProps} style={{ color: "var(--color-subtle)", marginTop: 2, flexShrink: 0 }}>
+          <div className="flex items-start gap-2">
+            <span
+              {...provided.dragHandleProps}
+              className="text-[var(--color-subtle)] mt-0.5 shrink-0"
+            >
               <GripVertical className="w-3.5 h-3.5" />
             </span>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--color-primary-light)", color: "var(--color-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="w-7 h-7 rounded-full bg-[var(--color-primary-light)] text-[var(--color-primary)] flex items-center justify-center text-[11px] font-bold shrink-0">
                   {initials}
                 </div>
-                <p style={{ fontSize: 13, fontWeight: 600, color: "var(--color-text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lead.name}</p>
+                <p className="text-[13px] font-semibold text-[var(--color-text)] truncate">{lead.name}</p>
               </div>
 
               {course && (
-                <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 6 }}>
-                  <BookOpen className="w-3 h-3 flex-shrink-0" style={{ color: "var(--color-muted)" }} />
-                  <span style={{ fontSize: 12, color: "var(--color-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{course.name}</span>
+                <div className="flex items-center gap-1 mb-1.5">
+                  <BookOpen className="w-3 h-3 shrink-0 text-[var(--color-muted)]" />
+                  <span className="text-xs text-[var(--color-muted)] truncate">{course.name}</span>
                 </div>
               )}
 
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary)" }}>
+              <div className="flex justify-between items-center">
+                <span className="text-[13px] font-bold text-[var(--color-primary)]">
                   {course ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(course.price) : "—"}
                 </span>
-                <div style={{ display: "flex", alignItems: "center", gap: 3, color: "var(--color-subtle)" }}>
+                <div className="flex items-center gap-1 text-[var(--color-subtle)]">
                   <Clock className="w-3 h-3" />
-                  <span style={{ fontSize: 11 }}>{daysAgo === 0 ? "hoje" : `${daysAgo}d`}</span>
+                  <span className="text-[11px]">{daysAgo === 0 ? "hoje" : `${daysAgo}d`}</span>
                 </div>
               </div>
             </div>
@@ -120,17 +118,22 @@ export default function KanbanPage() {
   }
 
   return (
-    <div style={{ padding: "32px", height: "100vh", display: "flex", flexDirection: "column" }}>
+    <div className="p-8 h-screen flex flex-col">
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+      <div className="flex justify-between items-center mb-5">
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700 }}>Pipeline de Vendas</h1>
-          <p style={{ fontSize: 14, color: "var(--color-muted)", marginTop: 2 }}>Arraste os cards para mover leads entre etapas</p>
+          <h1 className="text-2xl font-bold">Pipeline de Vendas</h1>
+          <p className="text-sm text-[var(--color-muted)] mt-0.5">Arraste os cards para mover leads entre etapas</p>
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          <div style={{ position: "relative" }}>
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--color-muted)" }} />
-            <input className="input-base pl-9" placeholder="Pesquisar lead..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: 220 }} />
+        <div className="flex gap-2.5">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-muted)]" />
+            <input
+              className="input-base pl-9 w-[220px]"
+              placeholder="Pesquisar lead..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
           <a href="/leads" className="btn-primary"><Plus className="w-4 h-4" /> Novo Lead</a>
         </div>
@@ -138,10 +141,10 @@ export default function KanbanPage() {
 
       {/* Board */}
       {isLoading ? (
-        <div style={{ textAlign: "center", padding: 60, color: "var(--color-muted)" }}>Carregando pipeline...</div>
+        <div className="text-center py-[60px] text-[var(--color-muted)]">Carregando pipeline...</div>
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
-          <div style={{ display: "flex", gap: 12, flex: 1, overflowX: "auto", paddingBottom: 8 }}>
+          <div className="flex gap-3 flex-1 overflow-x-auto pb-2">
             {COLUMNS.map(status => {
               const colLeads = byStatus[status] ?? [];
               const total = colLeads.reduce((s, l) => {
@@ -149,20 +152,41 @@ export default function KanbanPage() {
                 return s + (c?.price ?? 0);
               }, 0);
               return (
-                <div key={status} style={{ minWidth: 220, maxWidth: 260, flex: "1 0 220px", display: "flex", flexDirection: "column" }}>
+                <div
+                  key={status}
+                  className="min-w-[220px] max-w-[260px] flex-[1_0_220px] flex flex-col"
+                >
                   {/* Column Header */}
-                  <div style={{ background: COL_BG[status], borderRadius: "10px 10px 0 0", padding: "10px 14px", border: `1px solid ${COL_COLORS[status]}22`, borderBottom: "none" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: COL_COLORS[status] }} />
-                        <span style={{ fontSize: 13, fontWeight: 600, color: COL_COLORS[status] }}>{STATUS_LABELS[status]}</span>
+                  <div
+                    className="rounded-t-[10px] px-3.5 py-2.5 border-b-0"
+                    style={{
+                      background: COL_BG[status],
+                      border: `1px solid ${COL_COLORS[status]}22`,
+                      borderBottom: "none",
+                    }}
+                  >
+                    <div className="flex justify-between items-center mb-1">
+                      <div className="flex items-center gap-1.5">
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{ background: COL_COLORS[status] }}
+                        />
+                        <span
+                          className="text-[13px] font-semibold"
+                          style={{ color: COL_COLORS[status] }}
+                        >
+                          {STATUS_LABELS[status]}
+                        </span>
                       </div>
-                      <span style={{ background: COL_COLORS[status], color: "white", borderRadius: 99, padding: "1px 8px", fontSize: 11, fontWeight: 600 }}>
+                      <span
+                        className="text-white text-[11px] font-semibold rounded-full px-2 py-px"
+                        style={{ background: COL_COLORS[status] }}
+                      >
                         {colLeads.length}
                       </span>
                     </div>
                     {total > 0 && (
-                      <p style={{ fontSize: 11, color: "var(--color-muted)" }}>
+                      <p className="text-[11px] text-[var(--color-muted)]">
                         {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(total)}
                       </p>
                     )}
@@ -174,18 +198,11 @@ export default function KanbanPage() {
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
+                        className="flex-1 rounded-b-[10px] p-2 flex flex-col gap-2 min-h-[120px] overflow-y-auto transition-colors duration-150"
                         style={{
-                          flex: 1,
                           background: snapshot.isDraggingOver ? COL_BG[status] : "#f8fafc",
                           border: `1px solid ${snapshot.isDraggingOver ? COL_COLORS[status] : "var(--color-border)"}`,
-                          borderRadius: "0 0 10px 10px",
-                          padding: "10px 8px",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 8,
-                          minHeight: 120,
-                          transition: "background 0.15s ease, border-color 0.15s ease",
-                          overflowY: "auto",
+                          borderTop: "none",
                           maxHeight: "calc(100vh - 240px)",
                         }}
                       >
@@ -194,7 +211,7 @@ export default function KanbanPage() {
                         ))}
                         {provided.placeholder}
                         {colLeads.length === 0 && (
-                          <p style={{ fontSize: 12, color: "var(--color-subtle)", textAlign: "center", padding: "20px 0" }}>Nenhum lead aqui</p>
+                          <p className="text-xs text-[var(--color-subtle)] text-center py-5">Nenhum lead aqui</p>
                         )}
                       </div>
                     )}

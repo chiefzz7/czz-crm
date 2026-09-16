@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { coursesApi } from "@/services/courses.api";
 import type { Course, CourseCategory, CourseCreateRequest } from "@/types";
-import { Plus, BookOpen, Clock, DollarSign, Tag, ToggleLeft, ToggleRight, Trash2, X, Loader2 } from "lucide-react";
+import { Plus, Clock, DollarSign, ToggleLeft, ToggleRight, Trash2, X, Loader2 } from "lucide-react";
 
 const CATEGORIES: CourseCategory[] = ["Marketing", "Tecnologia", "Vendas", "Design", "Gestão", "Finanças", "Saúde", "Outros"];
 const CAT_COLORS: Record<string, string> = {
@@ -27,59 +27,62 @@ function CourseModal({ onClose }: { onClose: () => void }) {
   });
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }}>
-      <div className="card animate-fade-in" style={{ width: "100%", maxWidth: 480, padding: 28, maxHeight: "90vh", overflowY: "auto" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 600 }}>Novo Curso</h2>
+    <div className="fixed inset-0 bg-slate-900/45 flex items-center justify-center z-[1000] p-4">
+      <div className="card animate-fade-in w-full max-w-[480px] p-7 max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-lg font-semibold">Novo Curso</h2>
           <button className="btn-ghost" onClick={onClose}><X className="w-4 h-4" /></button>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <div className="flex flex-col gap-3.5">
           <div>
-            <label style={{ fontSize: 13, fontWeight: 500, display: "block", marginBottom: 6 }}>Nome do Curso *</label>
+            <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">Nome do Curso *</label>
             <input className="input-base" placeholder="Ex: Marketing Digital Completo"
               value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
           </div>
           <div>
-            <label style={{ fontSize: 13, fontWeight: 500, display: "block", marginBottom: 6 }}>Descrição</label>
-            <textarea className="input-base" rows={3} placeholder="Descreva o conteúdo do curso..."
-              value={form.description ?? ""} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              style={{ resize: "vertical" }} />
+            <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">Descrição</label>
+            <textarea className="input-base resize-y" rows={3} placeholder="Descreva o conteúdo do curso..."
+              value={form.description ?? ""} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, display: "block", marginBottom: 6 }}>Categoria *</label>
+              <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">Categoria *</label>
               <select className="input-base" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value as CourseCategory }))}>
                 {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, display: "block", marginBottom: 6 }}>Carga Horária *</label>
+              <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">Carga Horária *</label>
               <input type="number" className="input-base" placeholder="Ex: 40" min={1}
                 value={form.duration_hours || ""} onChange={e => setForm(f => ({ ...f, duration_hours: Number(e.target.value) }))} />
             </div>
           </div>
           <div>
-            <label style={{ fontSize: 13, fontWeight: 500, display: "block", marginBottom: 6 }}>Preço (R$) *</label>
+            <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">Preço (R$) *</label>
             <input type="number" className="input-base" placeholder="Ex: 997" min={0} step={0.01}
               value={form.price || ""} onChange={e => setForm(f => ({ ...f, price: Number(e.target.value) }))} />
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div className="flex items-center gap-2.5">
             <button onClick={() => setForm(f => ({ ...f, is_active: !f.is_active }))}>
               {form.is_active
-                ? <ToggleRight className="w-6 h-6" style={{ color: "var(--color-primary)" }} />
-                : <ToggleLeft className="w-6 h-6" style={{ color: "var(--color-muted)" }} />
+                ? <ToggleRight className="w-6 h-6 text-[var(--color-primary)]" />
+                : <ToggleLeft className="w-6 h-6 text-[var(--color-muted)]" />
               }
             </button>
-            <span style={{ fontSize: 13, color: "var(--color-text)" }}>
+            <span className="text-[13px] text-[var(--color-text)]">
               Curso {form.is_active ? "ativo" : "inativo"}
             </span>
           </div>
 
-          {error && <div style={{ background: "#fee2e2", color: "#b91c1c", borderRadius: 8, padding: "10px 12px", fontSize: 13 }}>{error}</div>}
+          {error && (
+            <div className="bg-red-100 text-red-700 rounded-lg px-3 py-2.5 text-[13px]">{error}</div>
+          )}
 
-          <div style={{ display: "flex", gap: 8 }}>
-            <button className="btn-secondary flex-1" onClick={onClose}>Cancelar</button>
+          {/* Action buttons — centralizados */}
+          <div className="flex items-center justify-center gap-2">
+            <button className="btn-secondary flex-1 justify-center" onClick={onClose}>Cancelar</button>
             <button className="btn-primary flex-1 justify-center" disabled={mutation.isPending} onClick={() => mutation.mutate(form)}>
               {mutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
               {mutation.isPending ? "Salvando..." : "Criar Curso"}
@@ -94,43 +97,59 @@ function CourseModal({ onClose }: { onClose: () => void }) {
 function CourseCard({ course, onDelete }: { course: Course; onDelete: () => void }) {
   const color = CAT_COLORS[course.category] ?? "#94a3b8";
   return (
-    <div className="card p-5 animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-            <span style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0, display: "inline-block" }} />
-            <span style={{ fontSize: 11, fontWeight: 600, color, textTransform: "uppercase", letterSpacing: "0.05em" }}>{course.category}</span>
+    <div className="card p-5 animate-fade-in flex flex-col gap-3">
+      <div className="flex justify-between items-start">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 mb-1">
+            <span
+              className="w-2 h-2 rounded-full shrink-0 inline-block"
+              style={{ background: color }}
+            />
+            <span
+              className="text-[11px] font-semibold uppercase tracking-[0.05em]"
+              style={{ color }}
+            >
+              {course.category}
+            </span>
           </div>
-          <h3 style={{ fontSize: 15, fontWeight: 600, color: "var(--color-text)", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+          <h3 className="text-[15px] font-semibold text-[var(--color-text)] line-clamp-2">
             {course.name}
           </h3>
         </div>
-        <span style={{ padding: "3px 8px", borderRadius: 99, fontSize: 11, fontWeight: 500, background: course.is_active ? "#d1fae5" : "#f1f5f9", color: course.is_active ? "#065f46" : "#94a3b8", marginLeft: 8, flexShrink: 0 }}>
+        <span
+          className={`px-2 py-0.5 rounded-full text-[11px] font-medium ml-2 shrink-0 ${
+            course.is_active
+              ? "bg-emerald-100 text-emerald-800"
+              : "bg-slate-100 text-slate-400"
+          }`}
+        >
           {course.is_active ? "Ativo" : "Inativo"}
         </span>
       </div>
 
       {course.description && (
-        <p style={{ fontSize: 13, color: "var(--color-muted)", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+        <p className="text-[13px] text-[var(--color-muted)] line-clamp-2">
           {course.description}
         </p>
       )}
 
-      <div style={{ display: "flex", gap: 16 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <Clock className="w-3.5 h-3.5" style={{ color: "var(--color-muted)" }} />
-          <span style={{ fontSize: 12, color: "var(--color-muted)" }}>{course.duration_hours}h</span>
+      <div className="flex gap-4">
+        <div className="flex items-center gap-1">
+          <Clock className="w-3.5 h-3.5 text-[var(--color-muted)]" />
+          <span className="text-xs text-[var(--color-muted)]">{course.duration_hours}h</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <DollarSign className="w-3.5 h-3.5" style={{ color: "var(--color-primary)" }} />
-          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary)" }}>
+        <div className="flex items-center gap-1">
+          <DollarSign className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+          <span className="text-[13px] font-bold text-[var(--color-primary)]">
             {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(course.price)}
           </span>
         </div>
       </div>
 
-      <button className="btn-ghost" style={{ alignSelf: "flex-end", color: "#ef4444" }}
-        onClick={() => { if (confirm("Excluir este curso?")) onDelete(); }}>
+      <button
+        className="btn-ghost self-end text-red-500"
+        onClick={() => { if (confirm("Excluir este curso?")) onDelete(); }}
+      >
         <Trash2 className="w-3.5 h-3.5" /> Excluir
       </button>
     </div>
@@ -156,11 +175,12 @@ export default function CoursesPage() {
   const active = courses.filter(c => c.is_active).length;
 
   return (
-    <div style={{ padding: "32px 32px 48px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+    <div className="px-8 pt-8 pb-12">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700 }}>Cursos</h1>
-          <p style={{ fontSize: 14, color: "var(--color-muted)", marginTop: 2 }}>
+          <h1 className="text-2xl font-bold">Cursos</h1>
+          <p className="text-sm text-[var(--color-muted)] mt-0.5">
             {courses.length} cursos · {active} ativos
           </p>
         </div>
@@ -170,21 +190,30 @@ export default function CoursesPage() {
       </div>
 
       {/* Filters */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
-        <button className={catFilter === "" ? "btn-primary" : "btn-secondary"} onClick={() => setCatFilter("")} style={{ fontSize: 12, padding: "6px 14px" }}>
+      <div className="flex gap-2 mb-6 flex-wrap">
+        <button
+          className={catFilter === "" ? "btn-primary" : "btn-secondary"}
+          onClick={() => setCatFilter("")}
+          style={{ fontSize: 12, padding: "6px 14px" }}
+        >
           Todos ({courses.length})
         </button>
         {CATEGORIES.filter(cat => courses.some(c => c.category === cat)).map(cat => (
-          <button key={cat} className={catFilter === cat ? "btn-primary" : "btn-secondary"} onClick={() => setCatFilter(cat)} style={{ fontSize: 12, padding: "6px 14px" }}>
+          <button
+            key={cat}
+            className={catFilter === cat ? "btn-primary" : "btn-secondary"}
+            onClick={() => setCatFilter(cat)}
+            style={{ fontSize: 12, padding: "6px 14px" }}
+          >
             {cat} ({courses.filter(c => c.category === cat).length})
           </button>
         ))}
       </div>
 
       {isLoading ? (
-        <div style={{ textAlign: "center", padding: 60, color: "var(--color-muted)" }}>Carregando cursos...</div>
+        <div className="text-center py-[60px] text-[var(--color-muted)]">Carregando cursos...</div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+        <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
           {filtered.map(course => (
             <CourseCard key={course.id} course={course} onDelete={() => deleteMutation.mutate(course.id)} />
           ))}

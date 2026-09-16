@@ -2,9 +2,9 @@ import { Sidebar } from "@/components/ui/Sidebar";
 
 export default function CoursesLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
+    <div className="flex min-h-screen">
       <Sidebar />
-      <main style={{ flex: 1, overflowY: "auto", minWidth: 0 }}>{children}</main>
+      <main className="flex-1 overflow-y-auto min-w-0">{children}</main>
     </div>
   );
 }

@@ -6,7 +6,6 @@ import { leadsApi } from "@/services/leads.api";
 import { coursesApi } from "@/services/courses.api";
 import {
   STATUS_LABELS,
-  STATUS_COLORS,
   type Lead,
   type Course,
   type LeadStatus,
@@ -50,11 +49,11 @@ function LeadFormFields({
   isEdit?: boolean;
 }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+    <div className="flex flex-col gap-3.5">
       {/* Nome */}
       <div>
-        <label style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text)", display: "block", marginBottom: 6 }}>
-          Nome completo <span style={{ color: "#ef4444" }}>*</span>
+        <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">
+          Nome completo <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -67,8 +66,8 @@ function LeadFormFields({
 
       {/* Curso */}
       <div>
-        <label style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text)", display: "block", marginBottom: 6 }}>
-          Curso / Pacote <span style={{ color: "#ef4444" }}>*</span>
+        <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">
+          Curso / Pacote <span className="text-red-500">*</span>
         </label>
         <select
           className="input-base"
@@ -86,8 +85,8 @@ function LeadFormFields({
 
       {/* Origem */}
       <div>
-        <label style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text)", display: "block", marginBottom: 6 }}>
-          Origem <span style={{ color: "#ef4444" }}>*</span>
+        <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">
+          Origem <span className="text-red-500">*</span>
         </label>
         <select
           className="input-base"
@@ -105,7 +104,7 @@ function LeadFormFields({
 
       {/* E-mail */}
       <div>
-        <label style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text)", display: "block", marginBottom: 6 }}>
+        <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">
           E-mail
         </label>
         <input
@@ -119,7 +118,7 @@ function LeadFormFields({
 
       {/* Telefone */}
       <div>
-        <label style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text)", display: "block", marginBottom: 6 }}>
+        <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">
           Telefone
         </label>
         <input
@@ -134,7 +133,7 @@ function LeadFormFields({
       {/* Status (somente edição) */}
       {isEdit && (
         <div>
-          <label style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text)", display: "block", marginBottom: 6 }}>
+          <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">
             Status
           </label>
           <select
@@ -154,16 +153,15 @@ function LeadFormFields({
 
       {/* Observações */}
       <div>
-        <label style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text)", display: "block", marginBottom: 6 }}>
+        <label className="block text-[13px] font-medium text-[var(--color-text)] mb-1.5">
           Observações
         </label>
         <textarea
-          className="input-base"
+          className="input-base resize-y"
           rows={3}
           placeholder="Anotações sobre o lead..."
           value={(form as any).notes ?? ""}
           onChange={(e) => setForm((f: any) => ({ ...f, notes: e.target.value || undefined }))}
-          style={{ resize: "vertical" }}
         />
       </div>
     </div>
@@ -198,29 +196,31 @@ function LeadCreateModal({ onClose, courses }: { onClose: () => void; courses: C
   };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }}>
-      <div className="card animate-fade-in" style={{ width: "100%", maxWidth: 480, padding: 28, maxHeight: "90vh", overflowY: "auto" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 600 }}>Novo Lead</h2>
+    <div className="fixed inset-0 bg-slate-900/45 flex items-center justify-center z-[1000] p-4">
+      <div className="card animate-fade-in w-full max-w-[480px] p-7 max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-lg font-semibold">Novo Lead</h2>
           <button className="btn-ghost" onClick={onClose}>
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <p style={{ fontSize: 12, color: "var(--color-muted)", marginBottom: 16 }}>
-          Campos com <span style={{ color: "#ef4444" }}>*</span> são obrigatórios.
+        <p className="text-xs text-[var(--color-muted)] mb-4">
+          Campos com <span className="text-red-500">*</span> são obrigatórios.
         </p>
 
         <LeadFormFields form={form} setForm={setForm} courses={courses} />
 
         {error && (
-          <div style={{ background: "#fee2e2", color: "#b91c1c", borderRadius: 8, padding: "10px 12px", fontSize: 13, marginTop: 14 }}>
+          <div className="bg-red-100 text-red-700 rounded-lg px-3 py-2.5 text-[13px] mt-3.5">
             {error}
           </div>
         )}
 
-        <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
-          <button className="btn-secondary flex-1" onClick={onClose}>
+        {/* Action buttons — centralizados */}
+        <div className="flex items-center justify-center gap-2 mt-5">
+          <button className="btn-secondary flex-1 justify-center" onClick={onClose}>
             Cancelar
           </button>
           <button
@@ -269,32 +269,34 @@ function LeadEditModal({ lead, onClose, courses }: { lead: Lead; onClose: () => 
   };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }}>
-      <div className="card animate-fade-in" style={{ width: "100%", maxWidth: 480, padding: 28, maxHeight: "90vh", overflowY: "auto" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+    <div className="fixed inset-0 bg-slate-900/45 flex items-center justify-center z-[1000] p-4">
+      <div className="card animate-fade-in w-full max-w-[480px] p-7 max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-5">
           <div>
-            <h2 style={{ fontSize: 18, fontWeight: 600 }}>Editar Lead</h2>
-            <p style={{ fontSize: 12, color: "var(--color-muted)", marginTop: 2 }}>{lead.name}</p>
+            <h2 className="text-lg font-semibold">Editar Lead</h2>
+            <p className="text-xs text-[var(--color-muted)] mt-0.5">{lead.name}</p>
           </div>
           <button className="btn-ghost" onClick={onClose}>
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <p style={{ fontSize: 12, color: "var(--color-muted)", marginBottom: 16 }}>
-          Campos com <span style={{ color: "#ef4444" }}>*</span> são obrigatórios.
+        <p className="text-xs text-[var(--color-muted)] mb-4">
+          Campos com <span className="text-red-500">*</span> são obrigatórios.
         </p>
 
         <LeadFormFields form={form} setForm={setForm} courses={courses} isEdit />
 
         {error && (
-          <div style={{ background: "#fee2e2", color: "#b91c1c", borderRadius: 8, padding: "10px 12px", fontSize: 13, marginTop: 14 }}>
+          <div className="bg-red-100 text-red-700 rounded-lg px-3 py-2.5 text-[13px] mt-3.5">
             {error}
           </div>
         )}
 
-        <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
-          <button className="btn-secondary flex-1" onClick={onClose}>
+        {/* Action buttons — centralizados */}
+        <div className="flex items-center justify-center gap-2 mt-5">
+          <button className="btn-secondary flex-1 justify-center" onClick={onClose}>
             Cancelar
           </button>
           <button
@@ -322,52 +324,61 @@ function LeadDrawer({ lead, courses, onClose }: { lead: Lead; courses: Course[];
     .toUpperCase();
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.3)", display: "flex", justifyContent: "flex-end", zIndex: 1000 }}>
-      <div className="animate-slide-in" style={{ width: 360, background: "var(--color-surface)", height: "100%", overflowY: "auto", boxShadow: "var(--shadow-lg)" }}>
-        <div style={{ padding: 24, borderBottom: "1px solid var(--color-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ fontSize: 16, fontWeight: 600 }}>Detalhes do Lead</h2>
+    <div className="fixed inset-0 bg-slate-900/30 flex justify-end z-[1000]">
+      <div className="animate-slide-in w-[360px] bg-[var(--color-surface)] h-full overflow-y-auto shadow-[var(--shadow-lg)]">
+        {/* Drawer Header */}
+        <div className="px-6 py-5 border-b border-[var(--color-border)] flex justify-between items-center">
+          <h2 className="text-base font-semibold">Detalhes do Lead</h2>
           <button className="btn-ghost" onClick={onClose}>
             <X className="w-4 h-4" />
           </button>
         </div>
-        <div style={{ padding: 24 }}>
-          <div style={{ textAlign: "center", marginBottom: 24 }}>
-            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "var(--color-primary-light)", color: "var(--color-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, fontWeight: 700, margin: "0 auto 12px" }}>
+
+        <div className="p-6">
+          {/* Avatar + Name */}
+          <div className="text-center mb-6">
+            <div className="w-[72px] h-[72px] rounded-full bg-[var(--color-primary-light)] text-[var(--color-primary)] flex items-center justify-center text-2xl font-bold mx-auto mb-3">
               {initials}
             </div>
-            <h3 style={{ fontSize: 18, fontWeight: 600 }}>{lead.name}</h3>
-            <span className={`badge badge-${lead.status}`} style={{ marginTop: 6 }}>
+            <h3 className="text-lg font-semibold">{lead.name}</h3>
+            <span className={`badge badge-${lead.status} mt-1.5`}>
               {STATUS_LABELS[lead.status]}
             </span>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {/* Info Cards */}
+          <div className="flex flex-col gap-3">
             {[
               { icon: Mail, label: lead.email ?? "—" },
               { icon: Phone, label: lead.phone ?? "—" },
               { icon: BookOpen, label: course?.name ?? "Sem curso" },
             ].map(({ icon: Icon, label }, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", background: "var(--color-primary-light)", borderRadius: 8 }}>
-                <Icon className="w-4 h-4" style={{ color: "var(--color-primary)", flexShrink: 0 }} />
-                <span style={{ fontSize: 13, color: "var(--color-text)" }}>{label}</span>
+              <div
+                key={i}
+                className="flex items-center gap-2.5 px-3 py-2.5 bg-[var(--color-primary-light)] rounded-lg"
+              >
+                <Icon className="w-4 h-4 text-[var(--color-primary)] shrink-0" />
+                <span className="text-[13px] text-[var(--color-text)]">{label}</span>
               </div>
             ))}
 
             {lead.source && (
-              <div style={{ padding: "10px 12px", background: "var(--color-primary-light)", borderRadius: 8 }}>
-                <p style={{ fontSize: 12, fontWeight: 600, color: "var(--color-muted)", marginBottom: 2 }}>Origem</p>
-                <p style={{ fontSize: 13, color: "var(--color-text)" }}>{SOURCES.find((s) => s.value === lead.source)?.label ?? lead.source}</p>
+              <div className="px-3 py-2.5 bg-[var(--color-primary-light)] rounded-lg">
+                <p className="text-xs font-semibold text-[var(--color-muted)] mb-0.5">Origem</p>
+                <p className="text-[13px] text-[var(--color-text)]">
+                  {SOURCES.find((s) => s.value === lead.source)?.label ?? lead.source}
+                </p>
               </div>
             )}
 
             {lead.notes && (
-              <div style={{ padding: "12px", background: "#fffbeb", borderRadius: 8, borderLeft: "3px solid #f59e0b" }}>
-                <p style={{ fontSize: 12, fontWeight: 600, color: "#92400e", marginBottom: 4 }}>Anotações</p>
-                <p style={{ fontSize: 13, color: "#78350f" }}>{lead.notes}</p>
+              <div className="p-3 bg-amber-50 rounded-lg border-l-[3px] border-amber-400">
+                <p className="text-xs font-semibold text-amber-800 mb-1">Anotações</p>
+                <p className="text-[13px] text-amber-900">{lead.notes}</p>
               </div>
             )}
 
-            <div style={{ fontSize: 12, color: "var(--color-muted)", paddingTop: 8, borderTop: "1px solid var(--color-border)" }}>
+            <div className="text-xs text-[var(--color-muted)] pt-2 border-t border-[var(--color-border)]">
               <p>Criado em: {new Date(lead.created_at).toLocaleDateString("pt-BR")}</p>
               <p>Atualizado: {new Date(lead.updated_at).toLocaleDateString("pt-BR")}</p>
             </div>
@@ -413,12 +424,12 @@ export default function LeadsPage() {
   const courseMap = Object.fromEntries(courses.map((c) => [c.id, c.name]));
 
   return (
-    <div style={{ padding: "32px 32px 48px" }}>
+    <div className="px-8 pt-8 pb-12">
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+      <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700 }}>Leads</h1>
-          <p style={{ fontSize: 14, color: "var(--color-muted)", marginTop: 2 }}>{leads.length} leads cadastrados</p>
+          <h1 className="text-2xl font-bold">Leads</h1>
+          <p className="text-sm text-[var(--color-muted)] mt-0.5">{leads.length} leads cadastrados</p>
         </div>
         <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
           <Plus className="w-4 h-4" /> Novo Lead
@@ -426,20 +437,18 @@ export default function LeadsPage() {
       </div>
 
       {/* Filters */}
-      <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
-        <div style={{ position: "relative", flex: "1 1 240px" }}>
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--color-muted)" }} />
+      <div className="flex gap-3 mb-5 flex-wrap">
+        <div className="relative flex-[1_1_240px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-muted)]" />
           <input
-            className="input-base"
-            style={{ paddingLeft: "2.25rem" }}
+            className="input-base pl-9"
             placeholder="Pesquisar por nome ou e-mail..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <select
-          className="input-base"
-          style={{ width: "auto", minWidth: 160 }}
+          className="input-base w-auto min-w-[160px]"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as any)}
         >
@@ -453,26 +462,26 @@ export default function LeadsPage() {
       </div>
 
       {/* Table */}
-      <div className="card" style={{ overflow: "hidden" }}>
+      <div className="card overflow-hidden">
         {isLoading ? (
-          <div style={{ padding: 60, textAlign: "center", color: "var(--color-muted)" }}>
-            <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" style={{ color: "var(--color-primary)" }} />
-            <p style={{ fontSize: 13 }}>Carregando leads...</p>
+          <div className="py-[60px] text-center text-[var(--color-muted)]">
+            <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[var(--color-primary)]" />
+            <p className="text-[13px]">Carregando leads...</p>
           </div>
         ) : filtered.length === 0 ? (
-          <div style={{ padding: 60, textAlign: "center", color: "var(--color-muted)" }}>
-            <p style={{ fontSize: 15, marginBottom: 4 }}>Nenhum lead encontrado</p>
-            <p style={{ fontSize: 13 }}>Tente ajustar os filtros ou crie um novo lead.</p>
+          <div className="py-[60px] text-center text-[var(--color-muted)]">
+            <p className="text-[15px] mb-1">Nenhum lead encontrado</p>
+            <p className="text-[13px]">Tente ajustar os filtros ou crie um novo lead.</p>
           </div>
         ) : (
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
               <thead>
-                <tr style={{ background: "#f8fafc", borderBottom: "1px solid var(--color-border)" }}>
+                <tr className="bg-slate-50 border-b border-[var(--color-border)]">
                   {["Lead", "E-mail", "Telefone", "Curso", "Status", "Data", "Ações"].map((h) => (
                     <th
                       key={h}
-                      style={{ padding: "11px 16px", textAlign: "left", fontSize: 11, fontWeight: 600, color: "var(--color-muted)", textTransform: "uppercase", letterSpacing: "0.06em", whiteSpace: "nowrap" }}
+                      className="px-4 py-[11px] text-left text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-[0.06em] whitespace-nowrap"
                     >
                       {h}
                     </th>
@@ -490,30 +499,33 @@ export default function LeadsPage() {
                   return (
                     <tr
                       key={lead.id}
-                      className="animate-fade-in"
-                      style={{ borderBottom: "1px solid var(--color-border)", animationDelay: `${i * 0.03}s`, transition: "background 0.1s" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-primary-light)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                      className="animate-fade-in border-b border-[var(--color-border)] transition-colors duration-100 hover:bg-[var(--color-primary-light)]"
+                      style={{ animationDelay: `${i * 0.03}s` }}
                     >
-                      <td style={{ padding: "12px 16px" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <div style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--color-primary-light)", color: "var(--color-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0 }}>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-full bg-[var(--color-primary-light)] text-[var(--color-primary)] flex items-center justify-center text-xs font-bold shrink-0">
                             {initials}
                           </div>
-                          <span style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text)", whiteSpace: "nowrap" }}>{lead.name}</span>
+                          <span className="text-[13px] font-medium text-[var(--color-text)] whitespace-nowrap">
+                            {lead.name}
+                          </span>
                         </div>
                       </td>
-                      <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--color-muted)" }}>{lead.email ?? "—"}</td>
-                      <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--color-muted)" }}>{lead.phone ?? "—"}</td>
-                      <td style={{ padding: "12px 16px", fontSize: 13, color: "var(--color-text)", whiteSpace: "nowrap" }}>{courseMap[lead.course_id ?? ""] ?? "—"}</td>
-                      <td style={{ padding: "12px 16px" }}>
+                      <td className="px-4 py-3 text-[13px] text-[var(--color-muted)]">{lead.email ?? "—"}</td>
+                      <td className="px-4 py-3 text-[13px] text-[var(--color-muted)]">{lead.phone ?? "—"}</td>
+                      <td className="px-4 py-3 text-[13px] text-[var(--color-text)] whitespace-nowrap">
+                        {courseMap[lead.course_id ?? ""] ?? "—"}
+                      </td>
+                      <td className="px-4 py-3">
                         <span className={`badge badge-${lead.status}`}>{STATUS_LABELS[lead.status]}</span>
                       </td>
-                      <td style={{ padding: "12px 16px", fontSize: 12, color: "var(--color-muted)", whiteSpace: "nowrap" }}>
+                      <td className="px-4 py-3 text-xs text-[var(--color-muted)] whitespace-nowrap">
                         {new Date(lead.created_at).toLocaleDateString("pt-BR")}
                       </td>
-                      <td style={{ padding: "12px 16px" }}>
-                        <div style={{ display: "flex", gap: 4 }}>
+                      {/* Botões de ação — centralizados */}
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-center gap-1">
                           <button className="btn-ghost" title="Ver detalhes" onClick={() => setSelectedLead(lead)}>
                             <Eye className="w-3.5 h-3.5" />
                           </button>
@@ -522,7 +534,7 @@ export default function LeadsPage() {
                             title="Editar lead"
                             onClick={() => setEditingLead(lead)}
                           >
-                            <Pencil className="w-3.5 h-3.5" style={{ color: "var(--color-primary)" }} />
+                            <Pencil className="w-3.5 h-3.5 text-[var(--color-primary)]" />
                           </button>
                           <button
                             className="btn-ghost"
@@ -531,7 +543,7 @@ export default function LeadsPage() {
                               if (confirm("Excluir este lead?")) deleteMutation.mutate(lead.id);
                             }}
                           >
-                            <Trash2 className="w-3.5 h-3.5" style={{ color: "#ef4444" }} />
+                            <Trash2 className="w-3.5 h-3.5 text-red-500" />
                           </button>
                         </div>
                       </td>
